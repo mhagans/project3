@@ -4,21 +4,25 @@
 
 #include "SyntaxAnalyzer.hpp"
 
-#include "SyntaxAnalyzer.hpp"
-#include "SemanticsAnalyzer.h"
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <unordered_map>
 
 
 using namespace std;
 string tempType;
 string tempID;
+string paramID;
+int depth;
+long key;
+
 
 SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
     exitString  = "Incorrect Syntax Exiting Program Current Token: " + currentToken;
     tokenArray = input;
     index = 0;
+    depth = 0;
     exitString = "Incorrect Syntax Exiting Program CURRENT TOKEN: " + currentToken;
 
     for (int i = 0; i < tokenArray.size(); ++i) {
@@ -111,7 +115,11 @@ void SyntaxAnalyzer::declarationPrime() {
     if (currentClass == EMPTY) {
         currentClass = tempClass;
         currentToken = tempToken;
+        sematicHash.emplace(tempType, tempID, "funcDec", depth);
+        paramID = tempID;
         if (currentToken == "(") {
+
+
             Splitter();
             params();
             if (currentToken == ")") {
@@ -130,9 +138,9 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
     /*cout<< "inside declarationPrimeFactor"<<endl;
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
     if (currentToken == ";") {
-        SemanticsAnalyzer varDec (tempType, tempID);
+       // create entry for Semantics Symbol Table
+        sematicHash.emplace(tempType, tempID, "varDec",depth);
         // Finish declarations
-        cout << varDec.toString() << endl;
         Splitter();
     }else{
         //cout <<"inside declarationPrimeFactor else statement"<<endl;
@@ -146,6 +154,7 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
                     //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
                     Splitter();
                     if (currentToken == ";") {
+                        sematicHash.emplace(tempID, tempType, "varArrayDec", depth);
                         // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
                         Splitter();
                         // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
@@ -204,8 +213,10 @@ void SyntaxAnalyzer::params() {
     /*cout <<"inside params call"<<endl;
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
     if (currentToken == "int") {
+        tempType = currentToken;
         Splitter();
         if (currentClass == ID) {
+            tempID = currentToken;
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             paramPrime();
@@ -1007,3 +1018,4 @@ void SyntaxAnalyzer::isEmpty() {
     tempClass = currentClass;
     currentClass = EMPTY;
 }
+

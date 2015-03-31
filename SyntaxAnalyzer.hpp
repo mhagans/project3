@@ -11,7 +11,8 @@
 #include "LexicalAnalyzer.hpp"
 #include "cstdlib"
 #include <vector>
-#include "SemanticsAnalyzer.h"
+#include <unordered_map>
+
 
 
 class SyntaxAnalyzer {
@@ -27,6 +28,7 @@ public:
     int tempClass;
     int currentClass;
     string exitString;
+    unordered_map<string,string,string,int> sematicHash;
 
 
 
