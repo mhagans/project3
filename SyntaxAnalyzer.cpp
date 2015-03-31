@@ -131,6 +131,7 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
     if (currentToken == ";") {
         SemanticsAnalyzer varDec (tempType, tempID);
+        // Finish declarations
         cout << varDec.toString() << endl;
         Splitter();
     }else{
