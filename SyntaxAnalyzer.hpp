@@ -1,15 +1,21 @@
-#if !defined(_SA_)
-#define _SA_
+//
+// Created by Marcus on 3/31/2015.
+//
+
+#ifndef PROJECT3_SYNTAXANALYZER_H
+#define PROJECT3_SYNTAXANALYZER_H
+
 
 #include <iostream>
 #include <string>
 #include "LexicalAnalyzer.hpp"
 #include "cstdlib"
 #include <vector>
+#include "SemanticsAnalyzer.h"
 
 
 class SyntaxAnalyzer {
-    public:
+public:
     void syntax();
     void setNewInput(string in);
     SyntaxAnalyzer(vector<string> input);
@@ -24,7 +30,7 @@ class SyntaxAnalyzer {
 
 
 
-    private:
+private:
     void program();
     void declarationList();
     void declarationListPrime();
@@ -75,4 +81,4 @@ class SyntaxAnalyzer {
     void isEmpty();
 };
 
-#endif
+#endif //PROJECT3_SYNTAXANALYZER_H
