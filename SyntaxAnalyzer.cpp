@@ -3,8 +3,7 @@
 //
 
 #include "SyntaxAnalyzer.hpp"
-#include "Semantics.h"
-#include "SemanticsHash.h"
+
 
 #include <iostream>
 #include <vector>
@@ -12,12 +11,61 @@
 #include <unordered_map>
 
 
+class Make
+{
+public:
+    string Name;
+
+
+    Make(string name)
+    {
+        Name = name;
+    }
+
+
+    bool operator==(const Make &make) const
+    {
+        return Name == make.Name;
+    }
+};
+
+
+class Model
+{
+public:
+    string Name;
+    int Year;
+
+
+    Model(string name, int year)
+    {
+        Name = name;
+        Year = year;
+    }
+
+
+    bool operator==(const Model &model) const
+    {
+        return (Name == model.Name && Year == model.Year);
+    }
+};
+
+
+class ModelHash
+{
+public:
+    size_t operator()(const Model &model) const
+    {
+        return hash<string>()(model.Name) ^ hash<int>()(model.Year);
+    }
+};
+
 using namespace std;
 string tempType;
 string tempID;
 string paramID;
 int depth;
-unordered_map<Semantics, SemanticsHash> semTable;
+unordered_map<Model, Make, ModelHash> model2make;
 
 
 SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
@@ -30,6 +78,22 @@ SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
     /*for (int i = 0; i < tokenArray.size(); ++i) {
         cout << tokenArray[i] << endl;
     }*/
+
+    Model camry2005("Camry", 2005);
+    Make toyota("toyota");
+    model2make.emplace(camry2005, toyota);
+    Model tercel1993("Tercel", 1993);
+
+    Make japan("Japan");
+
+
+    model2make.emplace(tercel1993, japan);
+
+
+    for (auto &itr : model2make)
+    {
+        cout << itr.first.Name << " " << itr.first.Year << ": " << itr.second.Name << endl;
+    }
 }
 
 SyntaxAnalyzer::~SyntaxAnalyzer() {

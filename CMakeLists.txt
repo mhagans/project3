@@ -4,4 +4,4 @@ project(Project3)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 set(SOURCE_FILES main.cpp)
-add_executable(Project3 ${SOURCE_FILES} LexicalAnalyzer.cpp LexicalAnalyzer.hpp SyntaxAnalyzer.cpp SyntaxAnalyzer.hpp Semantics.cpp Semantics.h SemanticsHash.cpp SemanticsHash.h)
+add_executable(Project3 ${SOURCE_FILES} LexicalAnalyzer.cpp LexicalAnalyzer.hpp SyntaxAnalyzer.cpp SyntaxAnalyzer.hpp)
