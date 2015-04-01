@@ -3,6 +3,8 @@
 //
 
 #include "SyntaxAnalyzer.hpp"
+#include "Semantics.h"
+#include "SemanticsHash.h"
 
 #include <iostream>
 #include <vector>
@@ -15,7 +17,7 @@ string tempType;
 string tempID;
 string paramID;
 int depth;
-long key;
+unordered_map<Semantics, SemanticsHash> semTable;
 
 
 SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
@@ -25,9 +27,9 @@ SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
     depth = 0;
     exitString = "Incorrect Syntax Exiting Program CURRENT TOKEN: " + currentToken;
 
-    for (int i = 0; i < tokenArray.size(); ++i) {
+    /*for (int i = 0; i < tokenArray.size(); ++i) {
         cout << tokenArray[i] << endl;
-    }
+    }*/
 }
 
 SyntaxAnalyzer::~SyntaxAnalyzer() {
@@ -115,7 +117,7 @@ void SyntaxAnalyzer::declarationPrime() {
     if (currentClass == EMPTY) {
         currentClass = tempClass;
         currentToken = tempToken;
-        sematicHash.emplace(tempType, tempID, "funcDec", depth);
+        //.emplace(tempType, tempID, "funcDec", depth);
         paramID = tempID;
         if (currentToken == "(") {
 
@@ -139,11 +141,11 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
     if (currentToken == ";") {
        // create entry for Semantics Symbol Table
-        sematicHash.emplace(tempType, tempID, "varDec",depth);
+        //sematicHash.emplace(tempType, tempID, "varDec",depth);
         // Finish declarations
         Splitter();
     }else{
-        //cout <<"inside declarationPrimeFactor else statement"<<endl;
+        //cout <<"inside declarationPrimeFactor else statement"<< endl;
         if(currentToken == "[") {
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
@@ -154,7 +156,7 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
                     //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
                     Splitter();
                     if (currentToken == ";") {
-                        sematicHash.emplace(tempID, tempType, "varArrayDec", depth);
+                        //sematicHash.emplace(tempID, tempType, "varArrayDec", depth);
                         // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
                         Splitter();
                         // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
@@ -173,7 +175,7 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
             currentClass = EMPTY;
         }
     }
-    //cout<<"LEAVING DECLARATOINPRIMEFACTOR CALL"<<endl;
+    //cout <<"LEAVING DECLARATOINPRIMEFACTOR CALL"<<endl;
     // TokenStmt();
 
 }

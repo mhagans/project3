@@ -28,7 +28,7 @@ public:
     int tempClass;
     int currentClass;
     string exitString;
-    unordered_map<string,string,string,int> sematicHash;
+
 
 
 
