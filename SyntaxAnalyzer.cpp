@@ -11,21 +11,21 @@
 #include <unordered_map>
 
 
-class Make
+class SemID
 {
 public:
-    string Name;
+    string semID;
 
 
-    Make(string name)
+    SemID(string name)
     {
-        Name = name;
+        semID = name;
     }
 
 
-    bool operator==(const Make &make) const
+    bool operator==(const SemID &make) const
     {
-        return Name == make.Name;
+        return semID == make.semID;
     }
 };
 
@@ -65,7 +65,7 @@ string tempType;
 string tempID;
 string paramID;
 int depth;
-unordered_map<Model, Make, ModelHash> model2make;
+unordered_map<Model, SemID, ModelHash> model2make;
 
 
 SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
@@ -80,11 +80,11 @@ SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
     }*/
 
     Model camry2005("Camry", 2005);
-    Make toyota("toyota");
+    SemID toyota("toyota");
     model2make.emplace(camry2005, toyota);
     Model tercel1993("Tercel", 1993);
 
-    Make japan("Japan");
+    SemID japan("Japan");
 
 
     model2make.emplace(tercel1993, japan);
@@ -92,7 +92,7 @@ SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
 
     for (auto &itr : model2make)
     {
-        cout << itr.first.Name << " " << itr.first.Year << ": " << itr.second.Name << endl;
+        cout << itr.first.Name << " " << itr.first.Year << ": " << itr.second.semID << endl;
     }
 }
 
