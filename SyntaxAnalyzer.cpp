@@ -11,52 +11,52 @@
 #include <unordered_map>
 
 
+class SemType
+{
+public:
+    string semType;
+
+
+    SemType(string name)
+    {
+        semType = name;
+    }
+
+
+    bool operator==(const SemType &make) const
+    {
+        return semType == make.semType;
+    }
+};
+
+
 class SemID
 {
 public:
     string semID;
+    int Depth;
 
 
-    SemID(string name)
+    SemID(string name, int depth)
     {
         semID = name;
+        Depth = depth;
     }
 
 
-    bool operator==(const SemID &make) const
+    bool operator==(const SemID &model) const
     {
-        return semID == make.semID;
-    }
-};
-
-
-class Model
-{
-public:
-    string Name;
-    int Year;
-
-
-    Model(string name, int year)
-    {
-        Name = name;
-        Year = year;
-    }
-
-
-    bool operator==(const Model &model) const
-    {
-        return (Name == model.Name && Year == model.Year);
+        return (semID == model.semID && Depth == model.Depth);
     }
 };
 
 
-class ModelHash
+class SemHash
 {
 public:
-    size_t operator()(const Model &model) const
+    size_t operator()(const SemID &model) const
     {
-        return hash<string>()(model.Name) ^ hash<int>()(model.Year);
+        return hash<string>()(model.semID) ^ hash<int>()(model.Depth);
     }
 };
 
@@ -65,7 +65,7 @@ string tempType;
 string tempID;
 string paramID;
 int depth;
-unordered_map<Model, SemID, ModelHash> model2make;
+unordered_map<SemID, SemType, SemHash> semTable;
 
 
 SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
@@ -79,21 +79,6 @@ SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
         cout << tokenArray[i] << endl;
     }*/
 
-    Model camry2005("Camry", 2005);
-    SemID toyota("toyota");
-    model2make.emplace(camry2005, toyota);
-    Model tercel1993("Tercel", 1993);
-
-    SemID japan("Japan");
-
-
-    model2make.emplace(tercel1993, japan);
-
-
-    for (auto &itr : model2make)
-    {
-        cout << itr.first.Name << " " << itr.first.Year << ": " << itr.second.semID << endl;
-    }
 }
 
 SyntaxAnalyzer::~SyntaxAnalyzer() {
@@ -181,7 +166,7 @@ void SyntaxAnalyzer::declarationPrime() {
     if (currentClass == EMPTY) {
         currentClass = tempClass;
         currentToken = tempToken;
-        //.emplace(tempType, tempID, "funcDec", depth);
+        //semHash.emplace(tempType, tempID);
         paramID = tempID;
         if (currentToken == "(") {
 
@@ -204,6 +189,9 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
     /*cout<< "inside declarationPrimeFactor"<<endl;
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
     if (currentToken == ";") {
+        if(tempType == "void"){
+            SemReject();
+        }
        // create entry for Semantics Symbol Table
         //sematicHash.emplace(tempType, tempID, "varDec",depth);
         // Finish declarations
@@ -1085,3 +1073,8 @@ void SyntaxAnalyzer::isEmpty() {
     currentClass = EMPTY;
 }
 
+void SyntaxAnalyzer::SemReject() {
+    cout << "REJECT" << endl;
+    exit(1);
+
+}

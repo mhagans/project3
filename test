@@ -5,6 +5,8 @@ float test2;
 
 int gcd (int u , int v )
    {
+    void check2;
+
    	if ( v <= 0)
    		return u;
    	else

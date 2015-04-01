@@ -81,6 +81,8 @@ private:
     void TokenStmt();
 
     void isEmpty();
+
+    void SemReject();
 };
 
 #endif //PROJECT3_SYNTAXANALYZER_H
