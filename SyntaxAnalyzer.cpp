@@ -8,72 +8,27 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
-#include <unordered_map>
+#include "SemanticsTree.h"
 
 
-class SemType
-{
-public:
-    string semType;
 
-
-    SemType(string name)
-    {
-        semType = name;
-    }
-
-
-    bool operator==(const SemType &make) const
-    {
-        return semType == make.semType;
-    }
-};
-
-
-class SemID
-{
-public:
-    string semID;
-    int Depth;
-
-
-    SemID(string name, int depth)
-    {
-        semID = name;
-        Depth = depth;
-    }
-
-
-    bool operator==(const SemID &model) const
-    {
-        return (semID == model.semID && Depth == model.Depth);
-    }
-};
-
-
-class SemHash
-{
-public:
-    size_t operator()(const SemID &model) const
-    {
-        return hash<string>()(model.semID) ^ hash<int>()(model.Depth);
-    }
-};
 
 using namespace std;
 string tempType;
 string tempID;
-string paramID;
-int depth;
-unordered_map<SemID, SemType, SemHash> semTable;
+node *currentNode;
+SemanticsTree semTable;
+
+
 
 
 SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
     exitString  = "Incorrect Syntax Exiting Program Current Token: " + currentToken;
     tokenArray = input;
     index = 0;
-    depth = 0;
     exitString = "Incorrect Syntax Exiting Program CURRENT TOKEN: " + currentToken;
+    semTable = SemanticsTree();
+
 
     /*for (int i = 0; i < tokenArray.size(); ++i) {
         cout << tokenArray[i] << endl;
@@ -93,11 +48,11 @@ void SyntaxAnalyzer::syntax() {
     Splitter();
     program();
 
-    if(currentToken =="$"){
+    /*if(currentToken =="$"){
         cout << "Syntax is correct" <<endl;
     }else {
         cout << "Failed to compile at Token: " << currentToken << endl;
-    }
+    }*/
 
 }
 
@@ -166,8 +121,8 @@ void SyntaxAnalyzer::declarationPrime() {
     if (currentClass == EMPTY) {
         currentClass = tempClass;
         currentToken = tempToken;
-        //semHash.emplace(tempType, tempID);
-        paramID = tempID;
+        semTable.insert(tempID, tempType);
+
         if (currentToken == "(") {
 
 
@@ -188,17 +143,21 @@ void SyntaxAnalyzer::declarationPrime() {
 void SyntaxAnalyzer::declarationPrimeFactor() {
     /*cout<< "inside declarationPrimeFactor"<<endl;
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
+
     if (currentToken == ";") {
         if(tempType == "void"){
             SemReject();
         }
-       // create entry for Semantics Symbol Table
-        //sematicHash.emplace(tempType, tempID, "varDec",depth);
-        // Finish declarations
+        semTable.insert(tempID, tempType);
         Splitter();
     }else{
         //cout <<"inside declarationPrimeFactor else statement"<< endl;
         if(currentToken == "[") {
+            if(tempType == "void"){
+                SemReject();
+            }
+            // add array check
+            //semTable.insert(tempID, tempType);
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             if (currentClass == INT) {
