@@ -6,33 +6,53 @@
 #define PROJECT3_SEMANTICSTREE_H
 
 #include <string>
+#include <unordered_map>
+#include <string>
 
 using namespace std;
+
+struct varList{
+    string varID;
+    string varType;
+    int value;
+};
+
+struct funList{
+    string funID;
+    string funType;
+    vector<funList> funVariables;
+
+};
 struct node{
     string semID;
     string semType;
-    int depth;
-    bool function;
+    string key;
     node *left;
     node *right;
+    vector<varList> variables;
+    vector<funList> functions;
 };
+
 
 class SemanticsTree {
 public:
     SemanticsTree();
     ~SemanticsTree();
 
-    void insert(string key, string type);
+    void insert(string key);
     node *search(string key);
     void destroy_tree();
+    void varInsert(string key, string id, string type);
 
 private:
     void destroy_tree(node *leaf);
-
-    void insert(string key, string type, node *leaf);
+    void varInsert(string key, string id, string type, node *leaf);
+    void insert(string key,node *leaf);
     node *search(string key, node *leaf);
 
     node *root;
+    varList *var;
+    funList *fun;
 
 };
 

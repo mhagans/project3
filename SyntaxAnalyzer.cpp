@@ -121,7 +121,7 @@ void SyntaxAnalyzer::declarationPrime() {
     if (currentClass == EMPTY) {
         currentClass = tempClass;
         currentToken = tempToken;
-        semTable.insert(tempID, tempType);
+       // semTable.insert(tempID, tempType);
 
         if (currentToken == "(") {
 
@@ -148,7 +148,7 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
         if(tempType == "void"){
             SemReject();
         }
-        semTable.insert(tempID, tempType);
+        //semTable.insert(tempID, tempType);
         Splitter();
     }else{
         //cout <<"inside declarationPrimeFactor else statement"<< endl;
@@ -248,6 +248,9 @@ void SyntaxAnalyzer::params() {
         if (currentToken=="void") {
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
+            if (currentToken != ")") {
+                SemReject();
+            }
             paramsPrime();
             // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
 
@@ -384,10 +387,12 @@ void SyntaxAnalyzer::localDeclarations(){
 
 void SyntaxAnalyzer::localDeclarationsPrime(){
     //cout<<"inside localDeclarationsPrime call"<<endl;
+    tempToken = currentToken;
 
     typeSpecific();
     if (currentClass != EMPTY) {
         if (currentClass == ID) {
+
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             declarationPrimeFactor();

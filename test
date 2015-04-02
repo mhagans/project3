@@ -2,10 +2,11 @@
 
 int test;
 float test2;
+int check;
 
-int gcd (int u , int v )
+int gcd (void, int u)
    {
-    void check2;
+    int check2;
 
    	if ( v <= 0)
    		return u;
@@ -14,7 +15,11 @@ int gcd (int u , int v )
    	/*note u-(u/v*v) == u mod v */
 
    	if ( x >= 1)
+   	{
+   		int x = 5;
+   		void check3;
    		return y;
+   	}
    	if (x==2)
    		return 3;
    }

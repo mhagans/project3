@@ -14,14 +14,13 @@ SemanticsTree::~SemanticsTree() {
     destroy_tree();
 }
 
-void SemanticsTree::insert(string key, string type) {
+void SemanticsTree::insert(string key) {
     if(root!=NULL)
-        insert(key, type, root);
+        insert(key, root);
     else
     {
         root = new node;
-        root->semID = key;
-        root->semType = type;
+        root->key = key;
         root->left=NULL;
         root->right=NULL;
     }
@@ -40,27 +39,25 @@ void SemanticsTree::destroy_tree(node *leaf) {
     }
 }
 
-void SemanticsTree::insert(string key, string type,  node *leaf) {
-    int comparecheck = key.compare(leaf->semID);
-    if(key.compare(leaf->semID) < 0 ) {
+void SemanticsTree::insert(string key, node *leaf) {
+
+    if(key.compare(leaf->key) < 0 ) {
         if(leaf->left != NULL) {
-            insert(key, type, leaf->left);
+            insert(key, leaf->left);
         }else {
             leaf->left = new node;
-            leaf->left->semID = key;
-            leaf->left->semType = type;
+            leaf->left->key = key;
             leaf->left->left = NULL;
             leaf->left->right = NULL;
         }
     }else {
-        int comparecheck2 = key.compare(leaf->semID);
-        if(key.compare(leaf->semID) > 0 || key.compare(leaf->semID) == 0) {
+
+        if(key.compare(leaf->key) > 0 || key.compare(leaf->key) == 0) {
             if(leaf->right != NULL) {
-                insert(key, type, leaf->right);
+                insert(key, leaf->right);
             }else {
                 leaf->right=new node;
-                leaf->right->semID = key;
-                leaf->right->semType = type;
+                leaf->right->key = key;
                 leaf->right->left=NULL;
                 leaf->right->right=NULL;
             }
@@ -72,9 +69,9 @@ void SemanticsTree::insert(string key, string type,  node *leaf) {
 node *SemanticsTree::search(string key, node *leaf) {
     if(leaf!=NULL)
     {
-        if(key.compare(leaf->semID) == 0 )
+        if(key.compare(leaf->key) == 0 )
             return leaf;
-        if(key.compare(leaf->semID) <0)
+        if(key.compare(leaf->key) <0)
             return search(key, leaf->left);
         else
             return search(key, leaf->right);
@@ -84,4 +81,13 @@ node *SemanticsTree::search(string key, node *leaf) {
 
 node *SemanticsTree::search(string key) {
     return search(key, root);
+}
+
+void SemanticsTree::varInsert(string key, string id, string type) {
+    node *currentNode = search(key, root);
+
+}
+
+void SemanticsTree::varInsert(string key, string id, string type, node *leaf) {
+
 }
