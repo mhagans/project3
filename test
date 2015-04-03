@@ -3,10 +3,11 @@
 int test;
 float test2;
 int check;
-
+int arraycheck[5];
 int gcd (int v, int u)
 {
 	int check2;
+
      //void check3;
 	if ( v <= 0)
 		return u;
@@ -22,4 +23,12 @@ int gcd (int v, int u)
 	}
 	if (x==2)
 		return 3;
+}
+void main(void)
+{
+	int x; int y;
+	void check4;
+	x = input();
+	y = input();
+	output(gcd(x,y));
 }

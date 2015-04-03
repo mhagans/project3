@@ -80,7 +80,7 @@ void SyntaxAnalyzer::declarationList(){
 void SyntaxAnalyzer::declaration(){
     // cout<<"inside declaration call"<<endl;
     // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
-    tempType = currentToken;
+
     typeSpecific();
     if (currentClass != EMPTY) {
         //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
@@ -178,7 +178,7 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
                     FailExit();
                 }
             } else {
-                FailExit();
+                SemReject();
             }
         } else {
             tempToken = currentToken;
@@ -192,9 +192,10 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
 }
 
 void SyntaxAnalyzer::typeSpecific(){
-    /*cout << "inside typeSpecific call"<<endl;
 
-    cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
+
+     tempType = currentToken;
+
     if(currentToken == "int"){
         // cout<< "inside typeSpecific  int if statement"<<endl;
         Splitter();
@@ -225,8 +226,9 @@ void SyntaxAnalyzer::typeSpecific(){
 void SyntaxAnalyzer::params() {
     /*cout <<"inside params call"<<endl;
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
+
     if (currentToken == "int") {
-        tempType = currentToken;
+
         Splitter();
         if (currentClass == ID) {
             tempID = currentToken;
@@ -388,6 +390,7 @@ void SyntaxAnalyzer::localDeclarations(){
 void SyntaxAnalyzer::localDeclarationsPrime(){
     //cout<<"inside localDeclarationsPrime call"<<endl;
     tempToken = currentToken;
+
 
     typeSpecific();
     if (currentClass != EMPTY) {
