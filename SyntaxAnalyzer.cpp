@@ -23,7 +23,7 @@ SemanticsTree semTable;
 
 
 SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
-    exitString  = "Incorrect Syntax Exiting Program Current Token: " + currentToken;
+    exitString  = "Incorrect Syntax Exiting Program Current Token: ";
     tokenArray = input;
     index = 0;
     exitString = "Incorrect Syntax Exiting Program CURRENT TOKEN: " + currentToken;
@@ -48,11 +48,11 @@ void SyntaxAnalyzer::syntax() {
     Splitter();
     program();
 
-    /*if(currentToken =="$"){
-        cout << "Syntax is correct" <<endl;
+    if(currentToken =="$"){
+        cout << "ACCEPT" <<endl;
     }else {
-        cout << "Failed to compile at Token: " << currentToken << endl;
-    }*/
+        cout << "REJECT" << currentToken << endl;
+    }
 
 }
 
@@ -1016,7 +1016,7 @@ void SyntaxAnalyzer::Splitter() {
 }
 
 void SyntaxAnalyzer::FailExit() {
-    cout << exitString << endl;
+    cout << exitString << currentToken << " indexed: " << index <<endl;
     exit(1);
 }
 

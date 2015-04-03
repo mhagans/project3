@@ -4,22 +4,22 @@ int test;
 float test2;
 int check;
 
-int gcd (void, int u)
-   {
-    int check2;
+int gcd (int v, int u)
+{
+	int check2;
+     //void check3;
+	if ( v <= 0)
+		return u;
+	else
+		return gcd( v , u - u / v* v );
+	/*note u-(u/v*v) == u mod v */
 
-   	if ( v <= 0)
-   		return u;
-   	else
-   		return gcd( v , u - u / v* v );
-   	/*note u-(u/v*v) == u mod v */
+	if ( x >= 1)
+	{
+		x = 5;
 
-   	if ( x >= 1)
-   	{
-   		int x = 5;
-   		void check3;
-   		return y;
-   	}
-   	if (x==2)
-   		return 3;
-   }
+		return y;
+	}
+	if (x==2)
+		return 3;
+}
