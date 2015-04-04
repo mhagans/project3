@@ -18,8 +18,7 @@ string tempType;
 string tempID;
 node *currentNode;
 SemanticsTree semTable;
-
-
+int tempIndex;
 
 
 SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
@@ -83,7 +82,7 @@ void SyntaxAnalyzer::declaration(){
 
     typeSpecific();
     if (currentClass != EMPTY) {
-        //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
+
         if(currentClass == ID) {
             // cout<< "inside declaratoin ID check"<<endl;
             tempID = currentToken;
@@ -112,20 +111,19 @@ void SyntaxAnalyzer::declarationListPrime(){
     }else {
         declarationListPrime();
     }
-    // cout<<"LEAVING DECLARATIONLISTPRIME CALL"<<endl;
+
 }
 
 void SyntaxAnalyzer::declarationPrime() {
-    // cout<<"inside declarationPrime call"<<endl;
+
     declarationPrimeFactor();
     if (currentClass == EMPTY) {
         currentClass = tempClass;
         currentToken = tempToken;
-       // semTable.insert(tempID, tempType);
 
+        semTable.insert(tempID);
+        currentNode = semTable.search(tempID);
         if (currentToken == "(") {
-
-
             Splitter();
             params();
             if (currentToken == ")") {
@@ -145,9 +143,22 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
 
     if (currentToken == ";") {
+        // Check to see if a var is of the void type
         if(tempType == "void"){
             SemReject();
         }
+        if(!semTable.isCreated()) {
+            semTable.insert("global");
+            currentNode = semTable.search("global");
+        }
+        for (vector<varList>::iterator it = currentNode->variables.begin(); it != currentNode->variables.end(); ++it) {
+            if (it->varID.compare(tempID) == 0) {
+                SemReject();
+            }
+        }
+
+        semTable.varInsert("global", tempID, tempType);
+
         //semTable.insert(tempID, tempType);
         Splitter();
     }else{
@@ -156,21 +167,35 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
             if(tempType == "void"){
                 SemReject();
             }
-            // add array check
-            //semTable.insert(tempID, tempType);
+            if(!semTable.isCreated()) {
+                semTable.insert("global");
+                currentNode = semTable.search("global");
+            }
+            for (vector<varList>::iterator it = currentNode->variables.begin(); it != currentNode->variables.end(); ++it) {
+                if (it->varID.compare(tempID) == 0) {
+                    SemReject();
+                }
+            }
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             if (currentClass == INT) {
+
+                // convert array index form string into a number
+                stringstream convert(currentToken);
+                convert >> tempIndex;
+                for (int i = 0; i < tempIndex; ++i) {
+                    semTable.varInsert("global", tempID, tempType);
+                }
                 //cout << "inside declarationPrimeFactor NUM check"<<endl;
                 Splitter();
                 if (currentToken == "]") {
                     //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
                     Splitter();
                     if (currentToken == ";") {
-                        //sematicHash.emplace(tempID, tempType, "varArrayDec", depth);
-                        // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
+                        // insert array into varList
+
                         Splitter();
-                        // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
+
                     }else {
                         FailExit();
                     }
@@ -226,12 +251,13 @@ void SyntaxAnalyzer::typeSpecific(){
 void SyntaxAnalyzer::params() {
     /*cout <<"inside params call"<<endl;
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
-
+    tempType = currentToken;
     if (currentToken == "int") {
 
         Splitter();
         if (currentClass == ID) {
             tempID = currentToken;
+            semTable.varInsert(currentNode->key, tempID, tempType);
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             paramPrime();
@@ -259,6 +285,8 @@ void SyntaxAnalyzer::params() {
         }else {
             if(currentToken == "float") {
                 if (currentClass == ID) {
+                    tempID = currentToken;
+                    semTable.varInsert(currentNode->semID, tempID, tempType);
                     Splitter();
                     //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
                     paramPrime();
@@ -330,6 +358,8 @@ void SyntaxAnalyzer::param(){
     if (currentClass != EMPTY) {
         if (currentClass == ID) {
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
+            tempID = currentToken;
+            semTable.varInsert(currentNode->key, tempID, tempType);
             Splitter();
             // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
 
@@ -390,12 +420,11 @@ void SyntaxAnalyzer::localDeclarations(){
 void SyntaxAnalyzer::localDeclarationsPrime(){
     //cout<<"inside localDeclarationsPrime call"<<endl;
     tempToken = currentToken;
-
-
     typeSpecific();
     if (currentClass != EMPTY) {
         if (currentClass == ID) {
-
+            tempID = currentToken;
+            // check to see if variable has already been
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             declarationPrimeFactor();

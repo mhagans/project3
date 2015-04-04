@@ -20,7 +20,8 @@ struct varList{
 struct funList{
     string funID;
     string funType;
-    vector<funList> funVariables;
+    vector<varList> funVariables;
+    vector<varList> funParams;
 
 };
 struct node{
@@ -35,7 +36,9 @@ struct node{
 
 
 class SemanticsTree {
+
 public:
+
     SemanticsTree();
     ~SemanticsTree();
 
@@ -43,6 +46,7 @@ public:
     node *search(string key);
     void destroy_tree();
     void varInsert(string key, string id, string type);
+    bool isCreated();
 
 private:
     void destroy_tree(node *leaf);
@@ -51,10 +55,10 @@ private:
     node *search(string key, node *leaf);
 
     node *root;
-    varList *var;
+    node *currentNode;
+    varList *vari;
     funList *fun;
 
 };
-
 
 #endif //PROJECT3_SEMANTICSTREE_H

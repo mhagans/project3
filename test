@@ -1,9 +1,14 @@
 
 
-int test;
-float test2;
 int check;
-int arraycheck[5];
+int test;
+
+
+
+int test;
+int arraycheck[2];
+int arraycheck[3];
+
 int gcd (int v, int u)
 {
 	int check2;
@@ -27,7 +32,7 @@ int gcd (int v, int u)
 void main(void)
 {
 	int x; int y;
-	void check4;
+	//void check4;
 	x = input();
 	y = input();
 	output(gcd(x,y));

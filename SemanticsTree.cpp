@@ -84,10 +84,22 @@ node *SemanticsTree::search(string key) {
 }
 
 void SemanticsTree::varInsert(string key, string id, string type) {
-    node *currentNode = search(key, root);
+    currentNode = search(key, root);
+    varInsert(key, id, type, currentNode);
 
 }
 
 void SemanticsTree::varInsert(string key, string id, string type, node *leaf) {
+    vari = new varList;
+    vari->varID = id;
+    vari->varType = type;
+    leaf->variables.push_back(*vari);
 
+}
+
+bool SemanticsTree::isCreated() {
+    if(root == NULL) {
+        return false;
+    }
+    return true;
 }
