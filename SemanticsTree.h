@@ -30,6 +30,8 @@ struct node{
     string key;
     node *left;
     node *right;
+    int numberOfParams;
+    string parentNode;
     vector<varList> variables;
     vector<funList> functions;
 };

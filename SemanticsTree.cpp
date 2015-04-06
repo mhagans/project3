@@ -21,6 +21,7 @@ void SemanticsTree::insert(string key) {
     {
         root = new node;
         root->key = key;
+        root->parentNode = NULL;
         root->left=NULL;
         root->right=NULL;
     }
@@ -47,6 +48,7 @@ void SemanticsTree::insert(string key, node *leaf) {
         }else {
             leaf->left = new node;
             leaf->left->key = key;
+            leaf->numberOfParams=NULL;
             leaf->left->left = NULL;
             leaf->left->right = NULL;
         }
@@ -57,6 +59,7 @@ void SemanticsTree::insert(string key, node *leaf) {
                 insert(key, leaf->right);
             }else {
                 leaf->right=new node;
+                leaf->numberOfParams= NULL;
                 leaf->right->key = key;
                 leaf->right->left=NULL;
                 leaf->right->right=NULL;
@@ -94,6 +97,8 @@ void SemanticsTree::varInsert(string key, string id, string type, node *leaf) {
     vari->varID = id;
     vari->varType = type;
     leaf->variables.push_back(*vari);
+    currentNode->numberOfParams++;
+
 
 }
 

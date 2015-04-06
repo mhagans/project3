@@ -48,6 +48,7 @@ void SyntaxAnalyzer::syntax() {
     program();
 
     if(currentToken =="$"){
+
         cout << "ACCEPT" <<endl;
     }else {
         cout << "REJECT" << currentToken << endl;
@@ -124,6 +125,7 @@ void SyntaxAnalyzer::declarationPrime() {
         semTable.insert(tempID);
         currentNode = semTable.search(tempID);
         if (currentToken == "(") {
+            currentNode->numberOfParams = 0;
             Splitter();
             params();
             if (currentToken == ")") {
@@ -156,8 +158,13 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
                 SemReject();
             }
         }
+        if(!semTable.isCreated()) {
+            semTable.varInsert("global", tempID, tempType);
+        }else {
 
-        semTable.varInsert("global", tempID, tempType);
+            semTable.varInsert(currentNode->key, tempID, tempType);
+        }
+
 
         //semTable.insert(tempID, tempType);
         Splitter();
@@ -176,6 +183,8 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
                     SemReject();
                 }
             }
+
+
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             if (currentClass == INT) {
@@ -183,9 +192,12 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
                 // convert array index form string into a number
                 stringstream convert(currentToken);
                 convert >> tempIndex;
+
                 for (int i = 0; i < tempIndex; ++i) {
-                    semTable.varInsert("global", tempID, tempType);
+                    semTable.varInsert(currentNode->key, tempID, tempType);
                 }
+
+
                 //cout << "inside declarationPrimeFactor NUM check"<<endl;
                 Splitter();
                 if (currentToken == "]") {
@@ -258,6 +270,7 @@ void SyntaxAnalyzer::params() {
         if (currentClass == ID) {
             tempID = currentToken;
             semTable.varInsert(currentNode->key, tempID, tempType);
+            //currentNode->numberOfParams++;
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             paramPrime();
@@ -287,6 +300,7 @@ void SyntaxAnalyzer::params() {
                 if (currentClass == ID) {
                     tempID = currentToken;
                     semTable.varInsert(currentNode->semID, tempID, tempType);
+                    currentNode->numberOfParams++;
                     Splitter();
                     //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
                     paramPrime();
@@ -355,11 +369,14 @@ void SyntaxAnalyzer::param(){
     /*cout <<"inside Param call"<<endl;
     cout <<"tokens: " << currentToken << " " << currentClass<< endl;*/
     typeSpecific();
+    int x =0;
     if (currentClass != EMPTY) {
+
         if (currentClass == ID) {
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             tempID = currentToken;
             semTable.varInsert(currentNode->key, tempID, tempType);
+            //currentNode->numberOfParams++;
             Splitter();
             // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
 
