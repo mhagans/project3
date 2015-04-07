@@ -31,6 +31,7 @@ struct node{
     node *left;
     node *right;
     int numberOfParams;
+    bool hasReturn;
     string parentNode;
     vector<varList> variables;
     vector<vector<varList> > scopeVariables;

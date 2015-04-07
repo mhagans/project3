@@ -420,8 +420,10 @@ void SyntaxAnalyzer::compoundStmt(){
         // Need to check if empty is ok for statementLIst
         if (currentToken == "}") {
 
-            if(currentNode->semType.compare("int") == 0 || currentNode->semType.compare("float")) {
-
+            if(currentNode->semType.compare("int") == 0 || currentNode->semType.compare("float") == 0) {
+                if(!currentNode->hasReturn) {
+                    SemReject();
+                }
             }
             Splitter();
             // TokenStmt();
@@ -625,6 +627,7 @@ void SyntaxAnalyzer::returnStmt(){
     /*cout<<"inside returnStmt call"<<endl;
     TokenStmt();*/
     if (currentToken == "return") {
+        currentNode->hasReturn = true;
         Splitter();
         // TokenStmt();
         returnStmtPrime();

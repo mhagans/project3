@@ -152,6 +152,7 @@ void SemanticsTree::insert(string key, string type, node *leaf) {
             leaf->left->key = key;
             leaf->left->semType = type;
             leaf->numberOfParams=0;
+            leaf->left->hasReturn = false;
             leaf->left->left = NULL;
             leaf->left->right = NULL;
 
@@ -170,6 +171,7 @@ void SemanticsTree::insert(string key, string type, node *leaf) {
                 leaf->numberOfParams= 0;
                 leaf->right->key = key;
                 leaf->right->semType = type;
+                leaf->right->hasReturn = false;
                 leaf->right->left=NULL;
                 leaf->right->right=NULL;
 
@@ -182,6 +184,9 @@ void SemanticsTree::insert(string key, string type, node *leaf) {
 
 bool SemanticsTree::hasReturn(string key) {
     node *returnNode = search(key);
-    if(returnNode)
+    if(!returnNode->hasReturn) {
+        cout << "REJECT" << endl;
+        exit(1);
+    }
     return false;
 }
