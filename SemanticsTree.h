@@ -33,6 +33,7 @@ struct node{
     int numberOfParams;
     string parentNode;
     vector<varList> variables;
+    vector<vector<varList> > scopeVariables;
     vector<funList> functions;
 };
 

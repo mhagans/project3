@@ -21,7 +21,7 @@ void SemanticsTree::insert(string key) {
     {
         root = new node;
         root->key = key;
-        root->parentNode = NULL;
+        root->parentNode = "";
         root->left=NULL;
         root->right=NULL;
     }
@@ -48,7 +48,7 @@ void SemanticsTree::insert(string key, node *leaf) {
         }else {
             leaf->left = new node;
             leaf->left->key = key;
-            leaf->numberOfParams=NULL;
+            leaf->numberOfParams=0;
             leaf->left->left = NULL;
             leaf->left->right = NULL;
         }
@@ -59,7 +59,7 @@ void SemanticsTree::insert(string key, node *leaf) {
                 insert(key, leaf->right);
             }else {
                 leaf->right=new node;
-                leaf->numberOfParams= NULL;
+                leaf->numberOfParams= 0;
                 leaf->right->key = key;
                 leaf->right->left=NULL;
                 leaf->right->right=NULL;
