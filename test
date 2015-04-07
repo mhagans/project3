@@ -2,11 +2,6 @@
 
 int check;
 int test;
-
-
-
-int test;
-int arraycheck[2];
 int arraycheck[3];
 
 int gcd (int v, int u)

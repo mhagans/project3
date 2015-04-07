@@ -157,7 +157,12 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
             }
         }
 
-        semTable.varInsert("global", tempID, tempType);
+        if (currentNode->key.compare("global") == 0) {
+            semTable.varInsert("global", tempID, tempType);
+        }else {
+            semTable.varInsert(currentNode->key, tempID, tempType);
+        }
+
 
         //semTable.insert(tempID, tempType);
         Splitter();
