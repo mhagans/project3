@@ -46,16 +46,21 @@ public:
     ~SemanticsTree();
 
     void insert(string key);
+    void insert(string key, string type);
     node *search(string key);
     void destroy_tree();
     void varInsert(string key, string id, string type);
     bool isCreated();
+    bool isMainCreated();
+    bool hasReturn(string key);
 
 private:
     void destroy_tree(node *leaf);
     void varInsert(string key, string id, string type, node *leaf);
     void insert(string key,node *leaf);
     node *search(string key, node *leaf);
+    void insert(string key, string type, node *leaf);
+
 
     node *root;
     node *currentNode;

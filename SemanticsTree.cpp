@@ -5,6 +5,7 @@
 #include <algorithm>
 #include "SemanticsTree.h"
 #include <string>
+#include <iostream>
 
 SemanticsTree::SemanticsTree() {
     root = NULL;
@@ -24,6 +25,8 @@ void SemanticsTree::insert(string key) {
         root->parentNode = "";
         root->left=NULL;
         root->right=NULL;
+
+
     }
 }
 
@@ -107,4 +110,78 @@ bool SemanticsTree::isCreated() {
         return false;
     }
     return true;
+}
+
+bool SemanticsTree::isMainCreated() {
+    node * isMain = root;
+    while (isMain != NULL) {
+        if (isMain->key.compare("main") == 0) {
+            return true;
+        }else {
+            isMain = isMain->left == NULL ? isMain->right : isMain->left;
+        }
+    }
+
+    return false;
+}
+
+void SemanticsTree::insert(string key, string type) {
+    if(root!=NULL)
+        insert(key, type, root);
+    else
+    {
+        root = new node;
+        root->key = key;
+        root->semType = type;
+        root->parentNode = "";
+        root->left=NULL;
+        root->right=NULL;
+    }
+}
+void SemanticsTree::insert(string key, string type, node *leaf) {
+
+    if(key.compare(leaf->key) < 0 ) {
+        if(leaf->left != NULL) {
+            insert(key, type, leaf->left);
+        }else {
+            if (isMainCreated()) {
+                cout << "REJECT" << endl;
+                exit(1);
+            }
+            leaf->left = new node;
+            leaf->left->key = key;
+            leaf->left->semType = type;
+            leaf->numberOfParams=0;
+            leaf->left->left = NULL;
+            leaf->left->right = NULL;
+
+        }
+    }else {
+
+        if(key.compare(leaf->key) > 0 || key.compare(leaf->key) == 0) {
+            if(leaf->right != NULL) {
+                insert(key, type, leaf->right);
+            }else {
+                if (isMainCreated()) {
+                    cout << "REJECT" << endl;
+                    exit(1);
+                }
+                leaf->right=new node;
+                leaf->numberOfParams= 0;
+                leaf->right->key = key;
+                leaf->right->semType = type;
+                leaf->right->left=NULL;
+                leaf->right->right=NULL;
+
+            }
+
+        }
+    }
+}
+
+
+bool SemanticsTree::hasReturn(string key) {
+    node *returnNode = search(key);
+    if(returnNode)
+    return false;
 }

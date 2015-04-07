@@ -1,34 +1,23 @@
+/* test for basic functionality of proj 3 - should fail */
+/* test 3 - 2 methods, scope check on b */
+
+int x;
+int y;
 
 
-int check;
-int test;
-int arraycheck[2];
-
-int gcd (int v, int u)
+int my ( float b, int u)
 {
-	int check;
+	int z;
+	int x[5];
+	z = z+y;
 
-     //void check3;
-	if ( v <= 0)
-		return u;
-	else
-		return gcd( v , u - u / v* v );
-
-	if ( x >= 1)
-	{
-		int check2;
-		x = 5;
-
-		return y;
-	}
-	if (x==2)
-		return 3;
+	return z;
 }
-void main(void)
+
+void main ( int x, int y )
 {
-	int x; int y;
-	//void check4;
-	x = input();
-	y = input();
-	output(gcd(x,y));
+	int z;
+
+	z = x + b;
+
 }

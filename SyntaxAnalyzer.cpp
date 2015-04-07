@@ -122,7 +122,7 @@ void SyntaxAnalyzer::declarationPrime() {
         currentClass = tempClass;
         currentToken = tempToken;
 
-        semTable.insert(tempID);
+        semTable.insert(tempID, tempType);
         currentNode = semTable.search(tempID);
         if (currentToken == "(") {
             currentNode->numberOfParams = 0;
@@ -297,9 +297,10 @@ void SyntaxAnalyzer::params() {
 
         }else {
             if(currentToken == "float") {
+                Splitter();
                 if (currentClass == ID) {
                     tempID = currentToken;
-                    semTable.varInsert(currentNode->semID, tempID, tempType);
+                    semTable.varInsert(currentNode->key, tempID, tempType);
                     currentNode->numberOfParams++;
                     Splitter();
                     //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
@@ -418,6 +419,10 @@ void SyntaxAnalyzer::compoundStmt(){
         EmptyCheck();
         // Need to check if empty is ok for statementLIst
         if (currentToken == "}") {
+
+            if(currentNode->semType.compare("int") == 0 || currentNode->semType.compare("float")) {
+
+            }
             Splitter();
             // TokenStmt();
         }else {
