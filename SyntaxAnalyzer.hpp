@@ -73,15 +73,10 @@ private:
     void args();
     void argsPrime();
     void Splitter();
-
     void FailExit();
-
     void EmptyCheck();
-
     void TokenStmt();
-
     void isEmpty();
-
     void SemReject();
 };
 

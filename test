@@ -2,21 +2,21 @@
 
 int check;
 int test;
-int arraycheck[3];
+int arraycheck[2];
 
 int gcd (int v, int u)
 {
-	int check2;
+	int check;
 
      //void check3;
 	if ( v <= 0)
 		return u;
 	else
 		return gcd( v , u - u / v* v );
-	/*note u-(u/v*v) == u mod v */
 
 	if ( x >= 1)
 	{
+		int check2;
 		x = 5;
 
 		return y;
