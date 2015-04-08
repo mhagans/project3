@@ -54,6 +54,7 @@ public:
     bool isCreated();
     bool isMainCreated();
     bool hasReturn(string key);
+    string hasBeenDeclared(string id);
 
 private:
     void destroy_tree(node *leaf);
@@ -61,6 +62,7 @@ private:
     void insert(string key,node *leaf);
     node *search(string key, node *leaf);
     void insert(string key, string type, node *leaf);
+
 
 
     node *root;

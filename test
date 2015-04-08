@@ -5,19 +5,18 @@ int x;
 int y;
 
 
-int my ( float b, int u)
+int my ( int b, int u)
 {
 	int z;
-	int x[5];
-	z = z+y;
 
-	return z;
+	a = z+y;
+
+	return a;
 }
 
 void main ( int x, int y )
 {
 	int z;
-
-	z = x + b;
+	a = x + b;
 
 }

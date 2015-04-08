@@ -17,6 +17,7 @@ using namespace std;
 string tempType;
 string tempID;
 node *currentNode;
+node *globalNode;
 SemanticsTree semTable;
 int tempIndex;
 
@@ -152,6 +153,7 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
         if(!semTable.isCreated()) {
             semTable.insert("global");
             currentNode = semTable.search("global");
+            globalNode = semTable.search("global");
         }
         for (vector<varList>::iterator it = currentNode->variables.begin(); it != currentNode->variables.end(); ++it) {
             if (it->varID.compare(tempID) == 0) {
@@ -161,6 +163,11 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
         if(!semTable.isCreated()) {
             semTable.varInsert("global", tempID, tempType);
         }else {
+            for (vector<varList>::iterator it = globalNode->variables.begin(); it != globalNode->variables.end(); ++it) {
+                if (it->varID.compare(tempID) == 0) {
+                    SemReject();
+                }
+            }
 
             semTable.varInsert(currentNode->key, tempID, tempType);
         }
@@ -177,8 +184,14 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
             if(!semTable.isCreated()) {
                 semTable.insert("global");
                 currentNode = semTable.search("global");
+                globalNode = semTable.search("global");
             }
             for (vector<varList>::iterator it = currentNode->variables.begin(); it != currentNode->variables.end(); ++it) {
+                if (it->varID.compare(tempID) == 0) {
+                    SemReject();
+                }
+            }
+            for (vector<varList>::iterator it = globalNode->variables.begin(); it != globalNode->variables.end(); ++it) {
                 if (it->varID.compare(tempID) == 0) {
                     SemReject();
                 }
@@ -192,6 +205,7 @@ void SyntaxAnalyzer::declarationPrimeFactor() {
                 // convert array index form string into a number
                 stringstream convert(currentToken);
                 convert >> tempIndex;
+
 
                 for (int i = 0; i < tempIndex; ++i) {
                     semTable.varInsert(currentNode->key, tempID, tempType);
@@ -646,14 +660,28 @@ void SyntaxAnalyzer::returnStmtPrime(){
     /*cout<<"inside returnStmtPrime call"<<endl;
     TokenStmt();*/
     if (currentToken == ";") {
+        if(currentNode->semType.compare("void") != 0) {
+            SemReject();
+        }
         Splitter();
         // TokenStmt();
 
     } else {
+        tempID = currentToken;
+        string returnType = semTable.hasBeenDeclared(tempID);
+        if(returnType != "") {
+            if(currentNode->semType.compare(returnType) != 0) {
+                SemReject();
+            }
+        } else {
+            SemReject();
+        }
+
         expression();
         //cout<<"CHECK TO SEE IF RETURNSTMTPRIME CAN MOVE"<<endl;
         //TokenStmt();
         if (currentToken == ";") {
+
             Splitter();
             //TokenStmt();
         }else {
@@ -669,6 +697,7 @@ void SyntaxAnalyzer::expression() {
     // cout<<"inside expression Call"<<endl;
 
     if (currentClass == ID) {
+        tempID = currentToken;
         /*cout<<"INSIDE EXPRESSION id CHECK"<<endl;
         TokenStmt();*/
         Splitter();

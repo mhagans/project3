@@ -190,3 +190,31 @@ bool SemanticsTree::hasReturn(string key) {
     }
     return false;
 }
+
+string SemanticsTree::hasBeenDeclared(string id) {
+    bool isDeclared = false;
+    string type;
+    node* returnNode = new node;
+    returnNode = root;
+    while (returnNode != NULL && !isDeclared) {
+        for (vector<varList>::iterator it = returnNode->variables.begin(); it != returnNode->variables.end(); ++it) {
+            if(it->varID.compare(id) == 0) {
+                isDeclared = true;
+                type = it->varType;
+                break;
+            }
+        }
+        if(returnNode->right != NULL) {
+            returnNode = returnNode->right;
+        } else {
+            returnNode = returnNode->left;
+        }
+
+    }
+    if (isDeclared) {
+        return type;
+    } else {
+        return "";
+    }
+
+}
