@@ -8,6 +8,7 @@
 #include <iostream>
 #include <vector>
 #include <sstream>
+#include <queue>
 #include "SemanticsTree.h"
 
 
@@ -20,7 +21,11 @@ node *currentNode;
 node *globalNode;
 SemanticsTree semTable;
 int tempIndex;
+priority_queue<string> eval;
 
+
+
+string expressionID;
 
 SyntaxAnalyzer::SyntaxAnalyzer(vector<string> input) {
     exitString  = "Incorrect Syntax Exiting Program Current Token: ";
@@ -528,6 +533,40 @@ void SyntaxAnalyzer::expressionStmt(){
     expression();
     if (currentClass != EMPTY) {
         if (currentToken == ";") {
+            string temp;
+            string evalcheck;
+            while (!eval.empty()) {
+
+                evalcheck = semTable.hasBeenDeclared(eval.top());
+                if (evalcheck.compare("") == 0) {
+                    SemReject();
+                }
+
+                if(eval.top().compare("int") == 0 || eval.top().compare("float") == 0)  {
+                    if(evalcheck.compare(eval.top()) == 0) {
+                        evalcheck = eval.top();
+                        eval.pop();
+                    }else {
+                        SemReject();
+                    }
+                }else {
+                    // call hasBeenDeclared since tehre is an id to be check
+                    temp = semTable.hasBeenDeclared(eval.top());
+                    if (temp.compare("") == 0) {
+                        SemReject();
+                    }
+
+                    if (evalcheck.compare(temp) == 0) {
+                        evalcheck = temp;
+                        eval.pop();
+                    }else {
+                        SemReject();
+                    }
+
+                }
+            }
+
+
             // TokenStmt();
             Splitter();
             // TokenStmt();
@@ -697,6 +736,8 @@ void SyntaxAnalyzer::expression() {
     // cout<<"inside expression Call"<<endl;
 
     if (currentClass == ID) {
+        expressionID = currentToken;
+        eval.push(expressionID);
         tempID = currentToken;
         /*cout<<"INSIDE EXPRESSION id CHECK"<<endl;
         TokenStmt();*/
@@ -728,6 +769,7 @@ void SyntaxAnalyzer::expression() {
             }
         }else {
             if (currentClass == INT) {
+                eval.push("int");
                 Splitter();
                 //TokenStmt();
                 termPrime();
@@ -739,6 +781,7 @@ void SyntaxAnalyzer::expression() {
 
             }else {
                 if (currentClass == FLOAT) {
+                    eval.push("float");
                     Splitter();
                     //TokenStmt();
                     termPrime();
@@ -761,9 +804,11 @@ void SyntaxAnalyzer::expression() {
 
 void SyntaxAnalyzer::expressionFactor(){
     //cout<<"inside expressionFactor call"<< endl;
+
     expressionPrime();
     EmptyCheck();
     if (currentToken == "=") {
+
         Splitter();
         // TokenStmt();
         expression();
@@ -1006,14 +1051,17 @@ void SyntaxAnalyzer::factor(){
         }
     }else {
         if (currentClass == INT) {
+            eval.push("int");
             Splitter();
             //TokenStmt();
         }else {
             if (currentClass == FLOAT) {
+                eval.push("flaot");
                 Splitter();
                 //TokenStmt();
             }else {
                 if (currentClass == ID) {
+                    eval.push(currentToken);
                     Splitter();
                     // TokenStmt();
                     factorPrime();

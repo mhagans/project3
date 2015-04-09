@@ -155,7 +155,6 @@ void SemanticsTree::insert(string key, string type, node *leaf) {
             leaf->left->hasReturn = false;
             leaf->left->left = NULL;
             leaf->left->right = NULL;
-
         }
     }else {
 
@@ -203,6 +202,7 @@ string SemanticsTree::hasBeenDeclared(string id) {
                 type = it->varType;
                 break;
             }
+
         }
         if(returnNode->right != NULL) {
             returnNode = returnNode->right;

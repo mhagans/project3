@@ -9,14 +9,13 @@ int my ( int b, int u)
 {
 	int z;
 
-	a = z+y;
-
-	return a;
+	z = z+y;
+	return z;
 }
 
-void main ( int x, int y )
+void main ( int x, int v )
 {
 	int z;
-	a = x + b;
+	v = x + b;
 
 }
