@@ -1,5 +1,3 @@
-/* test for basic functionality of proj 3 - should fail */
-/* test 3 - 2 methods, scope check on b */
 
 int x;
 int y;
@@ -13,9 +11,10 @@ int my ( int b, int u)
 	return z;
 }
 
-void main ( int x, int v )
+void main ( void )
 {
 	int z;
-	v = x + b;
+	z = my(2, 1.0)
+
 
 }

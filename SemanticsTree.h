@@ -34,7 +34,7 @@ struct node{
     bool hasReturn;
     string parentNode;
     vector<varList> variables;
-    vector<vector<varList> > scopeVariables;
+    vector<varList> paramVariables;
     vector<funList> functions;
 };
 
@@ -54,7 +54,7 @@ public:
     bool isCreated();
     bool isMainCreated();
     bool hasReturn(string key);
-    string hasBeenDeclared(string id);
+    string hasBeenDeclared(string id, node* leaf);
 
 private:
     void destroy_tree(node *leaf);

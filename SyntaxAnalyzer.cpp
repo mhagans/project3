@@ -289,6 +289,7 @@ void SyntaxAnalyzer::params() {
         if (currentClass == ID) {
             tempID = currentToken;
             semTable.varInsert(currentNode->key, tempID, tempType);
+            currentNode->paramVariables = currentNode->variables;
             //currentNode->numberOfParams++;
             Splitter();
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
@@ -320,6 +321,7 @@ void SyntaxAnalyzer::params() {
                 if (currentClass == ID) {
                     tempID = currentToken;
                     semTable.varInsert(currentNode->key, tempID, tempType);
+                    currentNode->paramVariables = currentNode->variables;
                     currentNode->numberOfParams++;
                     Splitter();
                     //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
@@ -396,6 +398,7 @@ void SyntaxAnalyzer::param(){
             //cout <<"tokens: " << currentToken << " " << currentClass<< endl;
             tempID = currentToken;
             semTable.varInsert(currentNode->key, tempID, tempType);
+            currentNode->paramVariables = currentNode->variables;
             //currentNode->numberOfParams++;
             Splitter();
             // cout <<"tokens: " << currentToken << " " << currentClass<< endl;
@@ -537,7 +540,7 @@ void SyntaxAnalyzer::expressionStmt(){
             string evalcheck;
             while (!eval.empty()) {
 
-                evalcheck = semTable.hasBeenDeclared(eval.top());
+                evalcheck = semTable.hasBeenDeclared(eval.top(), currentNode);
                 if (evalcheck.compare("") == 0) {
                     SemReject();
                 }
@@ -551,7 +554,7 @@ void SyntaxAnalyzer::expressionStmt(){
                     }
                 }else {
                     // call hasBeenDeclared since tehre is an id to be check
-                    temp = semTable.hasBeenDeclared(eval.top());
+                    temp = semTable.hasBeenDeclared(eval.top(), currentNode);
                     if (temp.compare("") == 0) {
                         SemReject();
                     }
@@ -707,7 +710,7 @@ void SyntaxAnalyzer::returnStmtPrime(){
 
     } else {
         tempID = currentToken;
-        string returnType = semTable.hasBeenDeclared(tempID);
+        string returnType = semTable.hasBeenDeclared(tempID, currentNode);
         if(returnType != "") {
             if(currentNode->semType.compare(returnType) != 0) {
                 SemReject();
@@ -751,6 +754,7 @@ void SyntaxAnalyzer::expression() {
         if (currentToken == "(") {
             // TokenStmt();
             Splitter();
+
             expression();
             if (currentClass == EMPTY) {
                 FailExit();

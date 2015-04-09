@@ -190,12 +190,31 @@ bool SemanticsTree::hasReturn(string key) {
     return false;
 }
 
-string SemanticsTree::hasBeenDeclared(string id) {
+string SemanticsTree::hasBeenDeclared(string id, node *leaf) {
     bool isDeclared = false;
-    string type;
-    node* returnNode = new node;
-    returnNode = root;
-    while (returnNode != NULL && !isDeclared) {
+    string type = "";
+    node* returnNode = leaf;
+    node *global = search("global");
+
+    for (vector<varList>::iterator it = returnNode->variables.begin(); it != returnNode->variables.end(); ++it) {
+        if(it->varID.compare(id) == 0) {
+            isDeclared = true;
+            type = it->varType;
+            break;
+        }
+
+    }
+    if (type.compare("") == 0) {
+        for (vector<varList>::iterator it = global->variables.begin(); it != global->variables.end(); ++it) {
+            if(it->varID.compare(id) == 0) {
+                isDeclared = true;
+                type = it->varType;
+                break;
+            }
+
+        }
+    }
+    /*while (returnNode != NULL && !isDeclared) {
         for (vector<varList>::iterator it = returnNode->variables.begin(); it != returnNode->variables.end(); ++it) {
             if(it->varID.compare(id) == 0) {
                 isDeclared = true;
@@ -210,11 +229,11 @@ string SemanticsTree::hasBeenDeclared(string id) {
             returnNode = returnNode->left;
         }
 
-    }
+    }*/
     if (isDeclared) {
         return type;
     } else {
-        return "";
+        return type;
     }
 
 }
